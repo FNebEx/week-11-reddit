@@ -26,11 +26,11 @@ export default function Home({ posts }) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       
-      <header className='bg-black text-white h-12 flex pt-3 px-20 pb-2'>
-        <p>Reddit Clone</p>
+      <header className='bg-black text-white font-bold h-12 flex pt-3 px-20 pb-2'>
+        <p className="text-bold">Reddit Clone</p>
         <p className="grow"></p>
         <a
-          className='flex-l border px-4 font-bold rounded-full mb-1' 
+          className='flex-l border px-4 pb-6 font-bold rounded-full mb-1' 
           href={session ? "/api/auth/signout" : "/api/auth/signin"}
         >
           {session ? 'logout' : 'login'}
@@ -38,7 +38,7 @@ export default function Home({ posts }) {
       </header>
       {session && (
         <pre>
-          {JSON.stringify(session.user, null, 2)}
+          { JSON.stringify(session, null, 2) }
         </pre>
       )}
       <Posts posts={posts} />
