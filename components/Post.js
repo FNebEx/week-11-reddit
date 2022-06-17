@@ -12,7 +12,7 @@ const Post = ({ post }) => {
             </Link>
              Posted by {post.author.name}{' '}
              <Link href={`/r/${post.subredditName}/comments/${post.id}`}>
-              <a>{ timeago.format(new Date(post.createdAt)) }</a>              
+              <a className="ml-4">{ timeago.format(new Date(post.createdAt)) }</a>              
              </Link>
           </div>
         </div>
