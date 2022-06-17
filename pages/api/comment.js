@@ -18,17 +18,29 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     const { content, post } = req.body;
-    const comment = await prisma.comment.create({
-      data: { 
-        content,
-        post: {
-          connect: { id: post }
-        },
-        author: {
-          connect: { id: user.id }
+    const data = {
+      content,
+      post: {
+        connect: {
+          id: post
         }
       },
-    });
+      author: {
+        connect: {
+          id: user.id
+        }
+      }
+    }
+
+    if (req.body.comment) {
+      data.parent = {
+        connect: {
+          id: req.body.comment
+        }
+      }
+    }
+
+    const comment = await prisma.comment.create({ data: data });
 
     res.json(comment);
     return;

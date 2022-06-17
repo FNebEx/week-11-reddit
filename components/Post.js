@@ -20,6 +20,12 @@ const Post = ({ post }) => {
       <div className="mt-5">
         <p className='flex-shrink text-2xl font-bold color-primary width-auto'>{post.title}</p>
         <p className='flex-shrink text-base font-normal color-primary width-auto mt-2'>{post.content}</p>
+        {post.image && (
+          <img 
+            className='flex-shrink text-base font-normal color-primary width-auto mt-2'
+            src={post.image}
+          />
+        )}
       </div>
     </div>
   );

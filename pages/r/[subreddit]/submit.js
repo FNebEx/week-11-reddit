@@ -10,6 +10,8 @@ export default function Submit({ subreddit }) {
   const { data: session, status } = useSession();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
   const loading = status === 'loading';
 
   if (loading) return null;
@@ -17,25 +19,42 @@ export default function Submit({ subreddit }) {
   if (!session) return <p className='text-center p-5'>Not logged in 🙄</p>;
 
   const handleSubmit = async (event) => {
-    event.prevntDefault();
+    event.preventDefault();
 
     if (!title) {
       alert('Enter a title');
       return;
     }
 
-    if (!content) {
+    if (!content && !image) {
       alert('Enter some text in the post');
       return;
     }
 
+    const body = new FormData();
+    body.append('image', image);
+    body.append('title', title);
+    body.append('content', content);
+    body.append('subreddit_name', subreddit.name);
+
     await fetch('/api/post',  {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, content, subreddit_name: subreddit.name })
+      body
     });
 
     router.push(`/r/${subreddit.name}`);
+  }
+
+  const handleImageUpload = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      if (event.target.files[0].size > 3072000) {
+        alert('Maximun size allowed is 3MB');
+        return false;
+      }
+
+      setImage(event.target.files[0]);
+      setImageURL(URL.createObjectURL(event.target.files[0]));
+    }
   }
 
   const handleTitleChange = (event) => setTitle(event.target.value);
@@ -61,6 +80,19 @@ export default function Submit({ subreddit }) {
               type="text" 
               placeholder="The post content"
             />
+            <div className='text-sm text-gray-600 '>
+              <label className='relative font-medium cursor-pointer underline my-3 block'>
+                {!image && <p>Upload an iamge</p>}
+                <img src={imageURL} />
+                <input 
+                  onChange={handleImageUpload}
+                  type="file" 
+                  name="image"
+                  accept="image/*"
+                  className="hidden"
+                />
+              </label>
+            </div>
             <textarea 
               onChange={handleContentChange}
               className='border border-gray-700 p-4 w-full text-lg font-medium bg-transparent outline-none'

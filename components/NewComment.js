@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function NewComment({ post }) {
+export default function NewComment({ post, comment }) {
   const router = useRouter();
   const [content, setContent] = useState('');
 
@@ -18,6 +18,7 @@ export default function NewComment({ post }) {
       body: JSON.stringify({
         content,
         post: post.id,
+        comment: comment?.id
       })
     });
 

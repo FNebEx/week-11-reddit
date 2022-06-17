@@ -73,18 +73,16 @@ const Post = ({ subreddit, post, vote, votes }) => {
           <div className="mt-5">
             <a className='flex-shrink text-2xl font-bold color-arimary width-auto'>{post.title}</a>
             <p className='flex-shrink text-base font-normal color-primary width-auto mt-2'>{post.content}</p>
+            {post.image && (
+              <img 
+                className='flex-shrink text-base font-normal color-primary width-auto mt-2'
+                src={post.image}
+              />
+            )}
           </div>
 
-          { session ? (
-            <NewComment post={post.commnets} />
-          ) : (
-            <p className='mt-5'>
-              <a className='mr-1 underline' href='/api/auth/signin'>Login</a>
-              to add a comment
-            </p>
-          )}
 
-          <Comments comments={post.comments} />
+          <Comments comments={post.comments} post={post} />
         </div>
       </div>
     </>
